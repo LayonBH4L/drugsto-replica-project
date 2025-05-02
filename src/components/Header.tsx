@@ -4,13 +4,19 @@ import { ShoppingCart, Search, Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
 import { useCart } from '@/contexts/CartContext';
+import CartDrawer from './CartDrawer';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const { totalItems } = useCart();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen);
   };
 
   return (
@@ -43,14 +49,17 @@ const Header = () => {
             <button className="text-drugsto-gray hover:text-drugsto-blue transition-colors">
               <Search size={20} />
             </button>
-            <div className="relative">
+            <button 
+              className="relative cursor-pointer"
+              onClick={toggleCart}
+            >
               <ShoppingCart size={20} className="text-drugsto-gray hover:text-drugsto-blue transition-colors" />
               {totalItems > 0 && (
                 <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center rounded-full bg-drugsto-blue text-white p-0 text-xs">
                   {totalItems}
                 </Badge>
               )}
-            </div>
+            </button>
             <button className="md:hidden text-drugsto-gray" onClick={toggleMenu}>
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -77,6 +86,9 @@ const Header = () => {
           </div>
         )}
       </div>
+      
+      {/* Cart Drawer */}
+      <CartDrawer open={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
   );
 };
